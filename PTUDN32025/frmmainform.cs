@@ -41,5 +41,23 @@ namespace PTUDN32025
         {
 
         }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void btndangxuat_Click(object sender, EventArgs e)
+        {
+            DialogResult dr = MessageBox.Show("Bạn có chắc muốn đăng xuất không?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if(dr == DialogResult.Yes)
+            {
+                this.Hide();
+                frmdangnhap dangnhap = new frmdangnhap();
+                dangnhap.ShowDialog();
+                this.Close();
+            }
+        }
     }
 }

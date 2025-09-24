@@ -39,10 +39,14 @@
             btndangnhap = new Button();
             btndong = new Button();
             pictureBox4 = new PictureBox();
+            pictureBox5 = new PictureBox();
+            panel1 = new Panel();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox4).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox5).BeginInit();
+            panel1.SuspendLayout();
             SuspendLayout();
             // 
             // contextMenuStrip1
@@ -53,21 +57,28 @@
             // 
             // txttendangnhap
             // 
-            txttendangnhap.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 163);
-            txttendangnhap.Location = new Point(73, 199);
+            txttendangnhap.BackColor = Color.White;
+            txttendangnhap.BorderStyle = BorderStyle.None;
+            txttendangnhap.Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 163);
+            txttendangnhap.ForeColor = SystemColors.ActiveCaptionText;
+            txttendangnhap.Location = new Point(77, 219);
             txttendangnhap.Name = "txttendangnhap";
-            txttendangnhap.Size = new Size(220, 31);
+            txttendangnhap.Size = new Size(220, 24);
             txttendangnhap.TabIndex = 1;
             txttendangnhap.Text = "Tên đăng nhập";
             txttendangnhap.MouseClick += txttendangnhap_MouseClick;
+            txttendangnhap.TextChanged += txttendangnhap_TextChanged;
             txttendangnhap.MouseEnter += txttendangnhap_MouseEnter;
             // 
             // txtmatkhau
             // 
-            txtmatkhau.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 163);
-            txtmatkhau.Location = new Point(73, 274);
+            txtmatkhau.BackColor = Color.White;
+            txtmatkhau.BorderStyle = BorderStyle.None;
+            txtmatkhau.Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 163);
+            txtmatkhau.ForeColor = SystemColors.ActiveCaptionText;
+            txtmatkhau.Location = new Point(77, 305);
             txtmatkhau.Name = "txtmatkhau";
-            txtmatkhau.Size = new Size(220, 31);
+            txtmatkhau.Size = new Size(220, 24);
             txtmatkhau.TabIndex = 2;
             txtmatkhau.Text = "Mật khẩu";
             txtmatkhau.MouseClick += txtmatkhau_MouseClick;
@@ -75,9 +86,9 @@
             // pictureBox1
             // 
             pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
-            pictureBox1.Location = new Point(109, 54);
+            pictureBox1.Location = new Point(106, 75);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(125, 100);
+            pictureBox1.Size = new Size(118, 108);
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox1.TabIndex = 3;
             pictureBox1.TabStop = false;
@@ -85,7 +96,7 @@
             // pictureBox2
             // 
             pictureBox2.Image = (Image)resources.GetObject("pictureBox2.Image");
-            pictureBox2.Location = new Point(36, 199);
+            pictureBox2.Location = new Point(40, 219);
             pictureBox2.Name = "pictureBox2";
             pictureBox2.Size = new Size(31, 31);
             pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -95,7 +106,7 @@
             // pictureBox3
             // 
             pictureBox3.Image = (Image)resources.GetObject("pictureBox3.Image");
-            pictureBox3.Location = new Point(36, 270);
+            pictureBox3.Location = new Point(40, 305);
             pictureBox3.Name = "pictureBox3";
             pictureBox3.Size = new Size(31, 31);
             pictureBox3.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -104,10 +115,11 @@
             // 
             // btndangnhap
             // 
-            btndangnhap.BackColor = Color.MediumAquamarine;
+            btndangnhap.BackColor = Color.SteelBlue;
             btndangnhap.FlatStyle = FlatStyle.Popup;
             btndangnhap.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
-            btndangnhap.Location = new Point(36, 343);
+            btndangnhap.ForeColor = SystemColors.ActiveCaptionText;
+            btndangnhap.Location = new Point(40, 378);
             btndangnhap.Name = "btndangnhap";
             btndangnhap.Size = new Size(257, 45);
             btndangnhap.TabIndex = 6;
@@ -117,14 +129,16 @@
             // 
             // btndong
             // 
-            btndong.BackColor = Color.FromArgb(35, 36, 55);
+            btndong.BackColor = Color.SteelBlue;
             btndong.BackgroundImageLayout = ImageLayout.None;
-            btndong.FlatStyle = FlatStyle.Popup;
+            btndong.FlatAppearance.MouseDownBackColor = Color.Red;
+            btndong.FlatAppearance.MouseOverBackColor = Color.Red;
+            btndong.FlatStyle = FlatStyle.Flat;
             btndong.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 163);
-            btndong.ForeColor = SystemColors.ButtonHighlight;
-            btndong.Location = new Point(289, 3);
+            btndong.ForeColor = Color.White;
+            btndong.Location = new Point(290, 0);
             btndong.Name = "btndong";
-            btndong.Size = new Size(42, 32);
+            btndong.Size = new Size(42, 30);
             btndong.TabIndex = 9;
             btndong.Text = "x";
             btndong.UseVisualStyleBackColor = false;
@@ -132,35 +146,61 @@
             // 
             // pictureBox4
             // 
-            pictureBox4.BackColor = Color.White;
-            pictureBox4.Location = new Point(68, 243);
+            pictureBox4.BackColor = Color.DimGray;
+            pictureBox4.Location = new Point(77, 249);
             pictureBox4.Name = "pictureBox4";
-            pictureBox4.Size = new Size(224, 10);
+            pictureBox4.Size = new Size(200, 2);
             pictureBox4.TabIndex = 10;
             pictureBox4.TabStop = false;
+            pictureBox4.Click += pictureBox4_Click;
             // 
-            // Form1
+            // pictureBox5
+            // 
+            pictureBox5.BackColor = Color.DimGray;
+            pictureBox5.Location = new Point(77, 335);
+            pictureBox5.Name = "pictureBox5";
+            pictureBox5.Size = new Size(200, 2);
+            pictureBox5.TabIndex = 11;
+            pictureBox5.TabStop = false;
+            pictureBox5.Click += pictureBox5_Click;
+            // 
+            // panel1
+            // 
+            panel1.BackColor = Color.SteelBlue;
+            panel1.Controls.Add(btndong);
+            panel1.Dock = DockStyle.Top;
+            panel1.Location = new Point(0, 0);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(332, 30);
+            panel1.TabIndex = 12;
+            // 
+            // frmdangnhap
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.FromArgb(35, 36, 55);
+            BackColor = Color.White;
             ClientSize = new Size(332, 479);
+            Controls.Add(panel1);
+            Controls.Add(pictureBox5);
             Controls.Add(pictureBox4);
-            Controls.Add(btndong);
             Controls.Add(btndangnhap);
             Controls.Add(pictureBox3);
             Controls.Add(pictureBox2);
             Controls.Add(pictureBox1);
             Controls.Add(txtmatkhau);
             Controls.Add(txttendangnhap);
+            ForeColor = SystemColors.AppWorkspace;
             FormBorderStyle = FormBorderStyle.None;
-            Name = "Form1";
+            Name = "frmdangnhap";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Form1";
+            Load += frmdangnhap_Load;
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox4).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox5).EndInit();
+            panel1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -176,5 +216,7 @@
         private Button btndangnhap;
         private Button btndong;
         private PictureBox pictureBox4;
+        private PictureBox pictureBox5;
+        private Panel panel1;
     }
 }

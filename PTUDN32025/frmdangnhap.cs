@@ -64,7 +64,7 @@ namespace PTUDN32025
             DataSet ds = new DataSet();
             da.Fill(ds);
 
-           if (ds.Tables[0].Rows.Count > 0)
+            if (ds.Tables[0].Rows.Count > 0)
             {
                 string role = ds.Tables[0].Rows[0]["TypeOfAccount"].ToString();
 
@@ -94,5 +94,24 @@ namespace PTUDN32025
 
         }
 
+        private void frmdangnhap_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txttendangnhap_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox4_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
