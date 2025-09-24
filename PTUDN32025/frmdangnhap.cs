@@ -54,40 +54,49 @@ namespace PTUDN32025
 
         private void btndangnhap_Click(object sender, EventArgs e)
         {
-            SqlConnection con = new SqlConnection();
-            con.ConnectionString = "data source = LAM; database = QuanLyThuVien; Integrated Security=True;";
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = con;
+            string cs = @"Data Source=.\SQLEXPRESS;Initial Catalog=QuanLyThuVien;Integrated Security=True;";
 
-            cmd.CommandText = "select * from ACCOUNT where IDAccount = '" + txttendangnhap.Text + "'and PasswordAccount ='" + txtmatkhau.Text + "'";
-            SqlDataAdapter da = new SqlDataAdapter(cmd);
-            DataSet ds = new DataSet();
-            da.Fill(ds);
-
-            if (ds.Tables[0].Rows.Count > 0)
+            using (SqlConnection con = new SqlConnection(cs))
             {
-                string role = ds.Tables[0].Rows[0]["TypeOfAccount"].ToString();
+                SqlCommand cmd = new SqlCommand(
+                    "SELECT * FROM ACCOUNT WHERE IDAccount = @id AND PasswordAccount = @pw", con);
 
-                this.Hide();
+                cmd.Parameters.AddWithValue("@id", txttendangnhap.Text);
+                cmd.Parameters.AddWithValue("@pw", txtmatkhau.Text);
 
-                if (role == "ADMIN")
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataSet ds = new DataSet();
+                da.Fill(ds);
+
+                if (ds.Tables[0].Rows.Count > 0)
                 {
-                    frmthuthu f = new frmthuthu();
-                    f.ShowDialog();
-                }
-                else if (role == "USER")
-                {
-                    frmdocgia f = new frmdocgia();
-                    f.ShowDialog();
-                }
+                    string role = ds.Tables[0].Rows[0]["TypeOfAccount"].ToString();
 
-                this.Close();
-            }
-            else
-            {
-                MessageBox.Show("Tên đăng nhập hoặc mật khẩu không đúng", "Lỗi đăng nhập", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    this.Hide();
+
+                    if (role == "ADMIN")
+                    {
+                        frmthuthu f = new frmthuthu();
+                        f.ShowDialog();
+                    }
+                    else if (role == "USER")
+                    {
+                        frmdocgia f = new frmdocgia();
+                        f.ShowDialog();
+                    }
+
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Tên đăng nhập hoặc mật khẩu không đúng",
+                                    "Lỗi đăng nhập",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Error);
+                }
             }
         }
+
 
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
