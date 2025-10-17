@@ -61,9 +61,10 @@
             txttendangnhap.BorderStyle = BorderStyle.None;
             txttendangnhap.Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 163);
             txttendangnhap.ForeColor = SystemColors.ActiveCaptionText;
-            txttendangnhap.Location = new Point(77, 219);
+            txttendangnhap.Location = new Point(125, 350);
+            txttendangnhap.Margin = new Padding(5, 5, 5, 5);
             txttendangnhap.Name = "txttendangnhap";
-            txttendangnhap.Size = new Size(220, 24);
+            txttendangnhap.Size = new Size(358, 39);
             txttendangnhap.TabIndex = 1;
             txttendangnhap.Text = "Tên đăng nhập";
             txttendangnhap.MouseClick += txttendangnhap_MouseClick;
@@ -76,9 +77,10 @@
             txtmatkhau.BorderStyle = BorderStyle.None;
             txtmatkhau.Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 163);
             txtmatkhau.ForeColor = SystemColors.ActiveCaptionText;
-            txtmatkhau.Location = new Point(77, 305);
+            txtmatkhau.Location = new Point(125, 488);
+            txtmatkhau.Margin = new Padding(5, 5, 5, 5);
             txtmatkhau.Name = "txtmatkhau";
-            txtmatkhau.Size = new Size(220, 24);
+            txtmatkhau.Size = new Size(358, 39);
             txtmatkhau.TabIndex = 2;
             txtmatkhau.Text = "Mật khẩu";
             txtmatkhau.MouseClick += txtmatkhau_MouseClick;
@@ -86,9 +88,10 @@
             // pictureBox1
             // 
             pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
-            pictureBox1.Location = new Point(106, 75);
+            pictureBox1.Location = new Point(172, 120);
+            pictureBox1.Margin = new Padding(5, 5, 5, 5);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(118, 108);
+            pictureBox1.Size = new Size(192, 173);
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox1.TabIndex = 3;
             pictureBox1.TabStop = false;
@@ -96,9 +99,10 @@
             // pictureBox2
             // 
             pictureBox2.Image = (Image)resources.GetObject("pictureBox2.Image");
-            pictureBox2.Location = new Point(40, 219);
+            pictureBox2.Location = new Point(65, 350);
+            pictureBox2.Margin = new Padding(5, 5, 5, 5);
             pictureBox2.Name = "pictureBox2";
-            pictureBox2.Size = new Size(31, 31);
+            pictureBox2.Size = new Size(50, 50);
             pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox2.TabIndex = 4;
             pictureBox2.TabStop = false;
@@ -106,9 +110,10 @@
             // pictureBox3
             // 
             pictureBox3.Image = (Image)resources.GetObject("pictureBox3.Image");
-            pictureBox3.Location = new Point(40, 305);
+            pictureBox3.Location = new Point(65, 488);
+            pictureBox3.Margin = new Padding(5, 5, 5, 5);
             pictureBox3.Name = "pictureBox3";
-            pictureBox3.Size = new Size(31, 31);
+            pictureBox3.Size = new Size(50, 50);
             pictureBox3.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox3.TabIndex = 5;
             pictureBox3.TabStop = false;
@@ -119,9 +124,10 @@
             btndangnhap.FlatStyle = FlatStyle.Popup;
             btndangnhap.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
             btndangnhap.ForeColor = SystemColors.ActiveCaptionText;
-            btndangnhap.Location = new Point(40, 378);
+            btndangnhap.Location = new Point(65, 605);
+            btndangnhap.Margin = new Padding(5, 5, 5, 5);
             btndangnhap.Name = "btndangnhap";
-            btndangnhap.Size = new Size(257, 45);
+            btndangnhap.Size = new Size(418, 72);
             btndangnhap.TabIndex = 6;
             btndangnhap.Text = "Đăng nhập";
             btndangnhap.UseVisualStyleBackColor = false;
@@ -136,9 +142,10 @@
             btndong.FlatStyle = FlatStyle.Flat;
             btndong.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 163);
             btndong.ForeColor = Color.White;
-            btndong.Location = new Point(290, 0);
+            btndong.Location = new Point(471, 0);
+            btndong.Margin = new Padding(5, 5, 5, 5);
             btndong.Name = "btndong";
-            btndong.Size = new Size(42, 30);
+            btndong.Size = new Size(68, 48);
             btndong.TabIndex = 9;
             btndong.Text = "x";
             btndong.UseVisualStyleBackColor = false;
@@ -147,9 +154,10 @@
             // pictureBox4
             // 
             pictureBox4.BackColor = Color.DimGray;
-            pictureBox4.Location = new Point(77, 249);
+            pictureBox4.Location = new Point(125, 398);
+            pictureBox4.Margin = new Padding(5, 5, 5, 5);
             pictureBox4.Name = "pictureBox4";
-            pictureBox4.Size = new Size(200, 2);
+            pictureBox4.Size = new Size(325, 3);
             pictureBox4.TabIndex = 10;
             pictureBox4.TabStop = false;
             pictureBox4.Click += pictureBox4_Click;
@@ -157,9 +165,10 @@
             // pictureBox5
             // 
             pictureBox5.BackColor = Color.DimGray;
-            pictureBox5.Location = new Point(77, 335);
+            pictureBox5.Location = new Point(125, 536);
+            pictureBox5.Margin = new Padding(5, 5, 5, 5);
             pictureBox5.Name = "pictureBox5";
-            pictureBox5.Size = new Size(200, 2);
+            pictureBox5.Size = new Size(325, 3);
             pictureBox5.TabIndex = 11;
             pictureBox5.TabStop = false;
             pictureBox5.Click += pictureBox5_Click;
@@ -170,16 +179,17 @@
             panel1.Controls.Add(btndong);
             panel1.Dock = DockStyle.Top;
             panel1.Location = new Point(0, 0);
+            panel1.Margin = new Padding(5, 5, 5, 5);
             panel1.Name = "panel1";
-            panel1.Size = new Size(332, 30);
+            panel1.Size = new Size(540, 48);
             panel1.TabIndex = 12;
             // 
             // frmdangnhap
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(13F, 32F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
-            ClientSize = new Size(332, 479);
+            ClientSize = new Size(540, 766);
             Controls.Add(panel1);
             Controls.Add(pictureBox5);
             Controls.Add(pictureBox4);
@@ -191,6 +201,7 @@
             Controls.Add(txttendangnhap);
             ForeColor = SystemColors.AppWorkspace;
             FormBorderStyle = FormBorderStyle.None;
+            Margin = new Padding(5, 5, 5, 5);
             Name = "frmdangnhap";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Form1";
