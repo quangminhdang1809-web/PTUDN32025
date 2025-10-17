@@ -35,5 +35,15 @@
         }
 
         #endregion
+
+        private ContextMenuStrip contextMenuStrip1;
+        private TextBox txttendangnhap;
+        private TextBox txtmatkhau;
+        private PictureBox pictureBox1;
+        private PictureBox pictureBox2;
+        private PictureBox pictureBox3;
+        private Button btndangnhap;
+        private Button btndong;
+        private PictureBox pictureBox4;
     }
 }
