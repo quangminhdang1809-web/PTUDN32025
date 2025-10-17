@@ -41,6 +41,7 @@
             pictureBox4 = new PictureBox();
             pictureBox5 = new PictureBox();
             panel1 = new Panel();
+            chkxemmk = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
@@ -76,7 +77,7 @@
             txtmatkhau.BorderStyle = BorderStyle.None;
             txtmatkhau.Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 163);
             txtmatkhau.ForeColor = SystemColors.ActiveCaptionText;
-            txtmatkhau.Location = new Point(77, 305);
+            txtmatkhau.Location = new Point(77, 285);
             txtmatkhau.Name = "txtmatkhau";
             txtmatkhau.Size = new Size(220, 24);
             txtmatkhau.TabIndex = 2;
@@ -106,7 +107,7 @@
             // pictureBox3
             // 
             pictureBox3.Image = (Image)resources.GetObject("pictureBox3.Image");
-            pictureBox3.Location = new Point(40, 305);
+            pictureBox3.Location = new Point(40, 285);
             pictureBox3.Name = "pictureBox3";
             pictureBox3.Size = new Size(31, 31);
             pictureBox3.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -157,7 +158,7 @@
             // pictureBox5
             // 
             pictureBox5.BackColor = Color.DimGray;
-            pictureBox5.Location = new Point(77, 335);
+            pictureBox5.Location = new Point(77, 315);
             pictureBox5.Name = "pictureBox5";
             pictureBox5.Size = new Size(200, 2);
             pictureBox5.TabIndex = 11;
@@ -174,12 +175,25 @@
             panel1.Size = new Size(332, 30);
             panel1.TabIndex = 12;
             // 
+            // chkxemmk
+            // 
+            chkxemmk.AutoSize = true;
+            chkxemmk.ForeColor = SystemColors.ActiveCaptionText;
+            chkxemmk.Location = new Point(176, 335);
+            chkxemmk.Name = "chkxemmk";
+            chkxemmk.Size = new Size(148, 24);
+            chkxemmk.TabIndex = 13;
+            chkxemmk.Text = "Hiển thị mật khẩu";
+            chkxemmk.UseVisualStyleBackColor = true;
+            chkxemmk.CheckedChanged += chkxemmk_CheckedChanged;
+            // 
             // frmdangnhap
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
             ClientSize = new Size(332, 479);
+            Controls.Add(chkxemmk);
             Controls.Add(panel1);
             Controls.Add(pictureBox5);
             Controls.Add(pictureBox4);
@@ -218,5 +232,6 @@
         private PictureBox pictureBox4;
         private PictureBox pictureBox5;
         private Panel panel1;
+        private CheckBox chkxemmk;
     }
 }

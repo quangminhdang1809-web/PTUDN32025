@@ -48,7 +48,7 @@ namespace PTUDN32025
             if (txtmatkhau.Text == "Mật khẩu")
             {
                 txtmatkhau.Clear();
-                txtmatkhau.PasswordChar = '*';
+                txtmatkhau.PasswordChar='*';
             }
         }
 
@@ -112,6 +112,18 @@ namespace PTUDN32025
         private void pictureBox4_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void chkxemmk_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkxemmk.Checked)
+            {
+                txtmatkhau.PasswordChar = '\0';  // Hiện mật khẩu
+            }
+            else
+            {
+                txtmatkhau.PasswordChar = '*'; // Ẩn mật khẩu
+            }
         }
     }
 }
