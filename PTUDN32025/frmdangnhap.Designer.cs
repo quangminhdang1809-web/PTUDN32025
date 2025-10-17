@@ -41,6 +41,7 @@
             pictureBox4 = new PictureBox();
             pictureBox5 = new PictureBox();
             panel1 = new Panel();
+            chkxemmk = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
@@ -184,6 +185,18 @@
             panel1.Size = new Size(540, 48);
             panel1.TabIndex = 12;
             // 
+            // chkxemmk
+            // 
+            chkxemmk.AutoSize = true;
+            chkxemmk.ForeColor = SystemColors.ActiveCaptionText;
+            chkxemmk.Location = new Point(176, 335);
+            chkxemmk.Name = "chkxemmk";
+            chkxemmk.Size = new Size(148, 24);
+            chkxemmk.TabIndex = 13;
+            chkxemmk.Text = "Hiển thị mật khẩu";
+            chkxemmk.UseVisualStyleBackColor = true;
+            chkxemmk.CheckedChanged += chkxemmk_CheckedChanged;
+            // 
             // frmdangnhap
             // 
             AutoScaleDimensions = new SizeF(13F, 32F);
@@ -229,5 +242,6 @@
         private PictureBox pictureBox4;
         private PictureBox pictureBox5;
         private Panel panel1;
+        private CheckBox chkxemmk;
     }
 }
