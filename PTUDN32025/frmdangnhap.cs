@@ -1,6 +1,7 @@
 ﻿using System.Data.SqlClient;
 using System;
 using System.Data;
+using System.Windows.Forms;
 namespace PTUDN32025
 {
     public partial class frmdangnhap : Form
@@ -54,50 +55,62 @@ namespace PTUDN32025
 
         private void btndangnhap_Click(object sender, EventArgs e)
         {
-            string cs = @"Data Source=.\SQLEXPRESS;Initial Catalog=QuanLyThuVien;Integrated Security=True;";
+            string ConnectionString = "data source = .\\SQLEXPRESS; database = QuanLyThuVien; Integrated Security=True;";
 
-            using (SqlConnection con = new SqlConnection(cs))
+            using (SqlConnection con = new SqlConnection(ConnectionString))
             {
-                SqlCommand cmd = new SqlCommand(
-                    "SELECT * FROM ACCOUNT WHERE IDAccount = @id AND PasswordAccount = @pw", con);
+                con.Open();
+                string query = "SELECT * FROM ACCOUNT WHERE IDAccount = @IDAccount AND PasswordAccount = @PasswordAccount";
+                SqlCommand cmd = new SqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@IDAccount", txttendangnhap.Text);
+                cmd.Parameters.AddWithValue("@PasswordAccount", txtmatkhau.Text);
 
-                cmd.Parameters.AddWithValue("@id", txttendangnhap.Text);
-                cmd.Parameters.AddWithValue("@pw", txtmatkhau.Text);
-
-                SqlDataAdapter da = new SqlDataAdapter(cmd);
-                DataSet ds = new DataSet();
-                da.Fill(ds);
-
-                if (ds.Tables[0].Rows.Count > 0)
+                SqlDataReader reader = cmd.ExecuteReader();
+                if (reader.Read())
                 {
-                    string role = ds.Tables[0].Rows[0]["TypeOfAccount"].ToString();
-
-                    this.Hide();
-
-                    if (role == "ADMIN")
-                    {
-                        frmthuthu f = new frmthuthu();
-                        f.ShowDialog();
-                    }
-                    else if (role == "USER")
-                    {
-                        frmdocgia f = new frmdocgia();
-                        f.ShowDialog();
-                    }
-
-                    this.Close();
+                    string role = reader["TypeOfAccount"].ToString();
+                    Session.IDAccount = reader["IDAccount"].ToString();
+                    Session.TypeOfAccount = role;
                 }
                 else
                 {
-                    MessageBox.Show("Tên đăng nhập hoặc mật khẩu không đúng",
-                                    "Lỗi đăng nhập",
-                                    MessageBoxButtons.OK,
-                                    MessageBoxIcon.Error);
+                    MessageBox.Show("Tên đăng nhập hoặc mật khẩu không đúng", "Lỗi đăng nhập", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    reader.Close();
+                    return;
                 }
+                reader.Close();
+
+                if (Session.TypeOfAccount == "ADMIN")
+                    {
+                        this.Hide(); 
+                        frmthuthu f = new frmthuthu();
+                        f.ShowDialog();
+                        this.Close(); 
+                    }
+                else if (Session.TypeOfAccount == "USER")
+                    {
+                        using (SqlConnection con2 = new SqlConnection(ConnectionString))
+                        {
+                            con2.Open();
+                            string queryDocGia = "Select MaDocGia, HoTen from DOCGIA where IDAccount = @id";
+                            SqlCommand cmdDocGia = new SqlCommand(queryDocGia, con2);
+                            cmdDocGia.Parameters.AddWithValue("@id", Session.IDAccount);
+
+                            SqlDataReader readerDG = cmdDocGia.ExecuteReader();
+                            if (readerDG.Read())
+                            {
+                                Session.MaDocGia = readerDG["MaDocGia"].ToString();
+                                Session.HoTen = readerDG["HoTen"].ToString();
+                            }
+                            readerDG.Close();
+                        }
+                        this.Hide();
+                        frmdocgia f = new frmdocgia();
+                        f.ShowDialog();
+                        this.Close();
+                    }   
             }
         }
-
-
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
 
