@@ -62,9 +62,10 @@
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label3.ForeColor = SystemColors.ButtonHighlight;
-            label3.Location = new Point(113, 620);
+            label3.Location = new Point(141, 775);
+            label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
-            label3.Size = new Size(110, 28);
+            label3.Size = new Size(132, 32);
             label3.TabIndex = 7;
             label3.Text = "Đăng xuất";
             label3.Click += label3_Click;
@@ -82,9 +83,10 @@
             btndangxuat.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
             btndangxuat.ForeColor = Color.White;
             btndangxuat.Image = (Image)resources.GetObject("btndangxuat.Image");
-            btndangxuat.Location = new Point(25, 612);
+            btndangxuat.Location = new Point(31, 765);
+            btndangxuat.Margin = new Padding(4);
             btndangxuat.Name = "btndangxuat";
-            btndangxuat.Size = new Size(59, 48);
+            btndangxuat.Size = new Size(74, 60);
             btndangxuat.TabIndex = 6;
             btndangxuat.UseVisualStyleBackColor = false;
             btndangxuat.Click += btndangxuat_Click;
@@ -104,8 +106,9 @@
             panel1.Dock = DockStyle.Left;
             panel1.ForeColor = SystemColors.ControlLightLight;
             panel1.Location = new Point(0, 0);
+            panel1.Margin = new Padding(4);
             panel1.Name = "panel1";
-            panel1.Size = new Size(262, 734);
+            panel1.Size = new Size(328, 918);
             panel1.TabIndex = 8;
             panel1.Paint += panel1_Paint_1;
             // 
@@ -122,12 +125,14 @@
             btn4.ForeColor = Color.White;
             btn4.Image = (Image)resources.GetObject("btn4.Image");
             btn4.ImageAlign = ContentAlignment.MiddleLeft;
-            btn4.Location = new Point(31, 347);
+            btn4.Location = new Point(39, 434);
+            btn4.Margin = new Padding(4);
             btn4.Name = "btn4";
-            btn4.Size = new Size(192, 45);
+            btn4.Size = new Size(240, 56);
             btn4.TabIndex = 3;
             btn4.Text = "     Mượn sách";
             btn4.UseVisualStyleBackColor = false;
+            btn4.Click += btn4_Click;
             // 
             // btnquanlysach
             // 
@@ -142,9 +147,10 @@
             btnquanlysach.ForeColor = Color.White;
             btnquanlysach.Image = (Image)resources.GetObject("btnquanlysach.Image");
             btnquanlysach.ImageAlign = ContentAlignment.MiddleLeft;
-            btnquanlysach.Location = new Point(31, 225);
+            btnquanlysach.Location = new Point(39, 281);
+            btnquanlysach.Margin = new Padding(4);
             btnquanlysach.Name = "btnquanlysach";
-            btnquanlysach.Size = new Size(192, 45);
+            btnquanlysach.Size = new Size(240, 56);
             btnquanlysach.TabIndex = 1;
             btnquanlysach.Text = "        Quản lý sách";
             btnquanlysach.UseVisualStyleBackColor = false;
@@ -163,9 +169,10 @@
             btn6.ForeColor = Color.White;
             btn6.Image = (Image)resources.GetObject("btn6.Image");
             btn6.ImageAlign = ContentAlignment.MiddleLeft;
-            btn6.Location = new Point(31, 475);
+            btn6.Location = new Point(39, 594);
+            btn6.Margin = new Padding(4);
             btn6.Name = "btn6";
-            btn6.Size = new Size(192, 45);
+            btn6.Size = new Size(240, 56);
             btn6.TabIndex = 5;
             btn6.Text = "Báo cáo";
             btn6.UseVisualStyleBackColor = false;
@@ -183,9 +190,10 @@
             btndocgia.ForeColor = Color.White;
             btndocgia.Image = (Image)resources.GetObject("btndocgia.Image");
             btndocgia.ImageAlign = ContentAlignment.MiddleLeft;
-            btndocgia.Location = new Point(31, 287);
+            btndocgia.Location = new Point(39, 359);
+            btndocgia.Margin = new Padding(4);
             btndocgia.Name = "btndocgia";
-            btndocgia.Size = new Size(192, 45);
+            btndocgia.Size = new Size(240, 56);
             btndocgia.TabIndex = 2;
             btndocgia.Text = "Độc giả";
             btndocgia.UseVisualStyleBackColor = false;
@@ -204,9 +212,10 @@
             btn5.ForeColor = Color.White;
             btn5.Image = (Image)resources.GetObject("btn5.Image");
             btn5.ImageAlign = ContentAlignment.MiddleLeft;
-            btn5.Location = new Point(31, 408);
+            btn5.Location = new Point(39, 510);
+            btn5.Margin = new Padding(4);
             btn5.Name = "btn5";
-            btn5.Size = new Size(192, 45);
+            btn5.Size = new Size(240, 56);
             btn5.TabIndex = 4;
             btn5.Text = "Trả sách";
             btn5.UseVisualStyleBackColor = false;
@@ -224,9 +233,10 @@
             btn1.ForeColor = SystemColors.Window;
             btn1.Image = (Image)resources.GetObject("btn1.Image");
             btn1.ImageAlign = ContentAlignment.MiddleLeft;
-            btn1.Location = new Point(31, 160);
+            btn1.Location = new Point(39, 200);
+            btn1.Margin = new Padding(4);
             btn1.Name = "btn1";
-            btn1.Size = new Size(192, 45);
+            btn1.Size = new Size(240, 56);
             btn1.TabIndex = 0;
             btn1.Text = "    Trang chủ";
             btn1.UseVisualStyleBackColor = false;
@@ -235,9 +245,10 @@
             // pictureBox1
             // 
             pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
-            pictureBox1.Location = new Point(60, 23);
+            pictureBox1.Location = new Point(75, 29);
+            pictureBox1.Margin = new Padding(4);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(100, 101);
+            pictureBox1.Size = new Size(125, 126);
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
@@ -249,9 +260,10 @@
             label1.Dock = DockStyle.Right;
             label1.Font = new Font("Segoe UI", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 163);
             label1.ForeColor = Color.White;
-            label1.Location = new Point(806, 0);
+            label1.Location = new Point(1009, 0);
+            label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
-            label1.Size = new Size(32, 38);
+            label1.Size = new Size(38, 45);
             label1.TabIndex = 0;
             label1.Text = "x";
             label1.Click += label1_Click;
@@ -261,9 +273,10 @@
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 163);
             label2.ForeColor = Color.White;
-            label2.Location = new Point(18, 23);
+            label2.Location = new Point(22, 29);
+            label2.Margin = new Padding(4, 0, 4, 0);
             label2.Name = "label2";
-            label2.Size = new Size(295, 31);
+            label2.Size = new Size(363, 38);
             label2.TabIndex = 1;
             label2.Text = "Hệ thống quản lý thư viện";
             // 
@@ -273,31 +286,34 @@
             panel2.Controls.Add(label2);
             panel2.Controls.Add(label1);
             panel2.Dock = DockStyle.Top;
-            panel2.Location = new Point(262, 0);
+            panel2.Location = new Point(328, 0);
+            panel2.Margin = new Padding(4);
             panel2.Name = "panel2";
-            panel2.Size = new Size(838, 71);
+            panel2.Size = new Size(1047, 89);
             panel2.TabIndex = 0;
             // 
             // panelMain
             // 
             panelMain.BackColor = Color.White;
             panelMain.Dock = DockStyle.Fill;
-            panelMain.Location = new Point(262, 71);
+            panelMain.Location = new Point(328, 89);
+            panelMain.Margin = new Padding(4);
             panelMain.Name = "panelMain";
-            panelMain.Size = new Size(838, 663);
+            panelMain.Size = new Size(1047, 829);
             panelMain.TabIndex = 9;
             panelMain.Paint += panelMain_Paint;
             // 
             // frmthuthu
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1100, 734);
+            ClientSize = new Size(1375, 918);
             Controls.Add(panelMain);
             Controls.Add(panel2);
             Controls.Add(panel1);
             FormBorderStyle = FormBorderStyle.None;
             IsMdiContainer = true;
+            Margin = new Padding(4);
             Name = "frmthuthu";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Thủ thư";

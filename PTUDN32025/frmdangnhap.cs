@@ -1,6 +1,7 @@
 ﻿using System.Data.SqlClient;
 using System;
 using System.Data;
+using System.Configuration;
 namespace PTUDN32025
 {
     public partial class frmdangnhap : Form
@@ -55,10 +56,14 @@ namespace PTUDN32025
         private void btndangnhap_Click(object sender, EventArgs e)
         {
             SqlConnection con = new SqlConnection();
-            con.ConnectionString = "data source = LAM; database = QuanLyThuVien; Integrated Security=True;";
+
+            // THAY ĐỔI DUY NHẤT ĐƯỢC THỰC HIỆN Ở ĐÂY
+            con.ConnectionString = ConfigurationManager.ConnectionStrings["LibraryDB"].ConnectionString;
+
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = con;
 
+            // Logic còn lại được giữ nguyên theo yêu cầu của bạn
             cmd.CommandText = "select * from ACCOUNT where IDAccount = '" + txttendangnhap.Text + "'and PasswordAccount ='" + txtmatkhau.Text + "'";
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();
