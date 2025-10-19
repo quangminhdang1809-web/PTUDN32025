@@ -16,7 +16,7 @@ namespace PTUDN32025
     public partial class themsach : Form
     {
         // Lưu chuỗi kết nối ở một nơi để tránh lặp lại và dễ dàng thay đổi.
-        private readonly string _connectionString = "data source=.\\SQLEXPRESS;database=QuanLyThuVien;integrated security=True";
+        private readonly string _connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["LibraryDb"].ConnectionString;
         private string _selectedImagePath = "";
 
         // LƯU Ý: Các điều khiển (controls) như txttensach, dgvtacgia, etc.

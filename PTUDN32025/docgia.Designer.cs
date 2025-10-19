@@ -55,7 +55,7 @@
             txtTimKiem.Name = "txtTimKiem";
             txtTimKiem.Size = new Size(835, 34);
             txtTimKiem.TabIndex = 0;
-            txtTimKiem.TextChanged += txtSearch_TextChanged;
+            txtTimKiem.TextChanged += txtTimKiem_TextChanged;
             // 
             // btnthemdocgia
             // 

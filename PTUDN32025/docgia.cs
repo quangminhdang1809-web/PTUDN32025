@@ -10,19 +10,176 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Collections.Generic;
-
+using System.Configuration; // Thêm using này để dùng App.config
 
 namespace PTUDN32025
 {
     public partial class ucdocgia : UserControl
     {
+        // 1. Thống nhất Connection String: Dùng một chuỗi kết nối duy nhất từ App.config
+        private readonly string connectionString = ConfigurationManager.ConnectionStrings["LibraryDB"].ConnectionString;
+
+        private DataTable dtAllDocGia;
         public event EventHandler themdocgiaClicked;
+
         public ucdocgia()
         {
             InitializeComponent();
         }
-        private DataTable dtAllDocGia;
+
+        private void ucdocgia_Load(object sender, EventArgs e)
+        {
+            // Tối ưu: Chỉ cần cài đặt cột một lần khi UserControl được tải
+            SetupDataGridview();
+            LoadLoaiDocGiaComboBox();
+            LoadDatagrid();
+        }
+
+        private void SetupDataGridview()
+        {
+            dgvxemdocgia.AutoGenerateColumns = false;
+            dgvxemdocgia.Columns.Clear();
+
+            dgvxemdocgia.Columns.Add(new DataGridViewTextBoxColumn { Name = "MaDocGia", DataPropertyName = "MaDocGia", HeaderText = "Mã Độc Giả", Width = 100 });
+            dgvxemdocgia.Columns.Add(new DataGridViewTextBoxColumn { Name = "HoTen", DataPropertyName = "HoTen", HeaderText = "Họ Tên", Width = 300 });
+            dgvxemdocgia.Columns.Add(new DataGridViewTextBoxColumn { Name = "NgaySinh", DataPropertyName = "NgaySinh", HeaderText = "Ngày Sinh", Width = 100 });
+            dgvxemdocgia.Columns.Add(new DataGridViewTextBoxColumn { Name = "DiaChi", DataPropertyName = "DiaChi", HeaderText = "Địa Chỉ", Width = 200 });
+            dgvxemdocgia.Columns.Add(new DataGridViewTextBoxColumn { Name = "Email", DataPropertyName = "Email", HeaderText = "Email", Width = 150 });
+            dgvxemdocgia.Columns.Add(new DataGridViewTextBoxColumn { Name = "NgayLapThe", DataPropertyName = "NgayLapThe", HeaderText = "Ngày Lập Thẻ", Width = 100 });
+            dgvxemdocgia.Columns.Add(new DataGridViewTextBoxColumn { Name = "NgayHetHan", DataPropertyName = "NgayHetHan", HeaderText = "Ngày Hết Hạn", Width = 100 });
+            dgvxemdocgia.Columns.Add(new DataGridViewTextBoxColumn { Name = "TenLoaiDocGia", DataPropertyName = "TenLoaiDocGia", HeaderText = "Loại Độc Giả", Width = 200 });
+            dgvxemdocgia.Columns.Add(new DataGridViewTextBoxColumn { Name = "SDT", DataPropertyName = "SDT", HeaderText = "Số Điện Thoại", Width = 100 });
+            dgvxemdocgia.Columns.Add(new DataGridViewTextBoxColumn { Name = "IDAccount", DataPropertyName = "IDAccount", HeaderText = "ID Tài Khoản", Width = 100, Visible = false }); // Ẩn cột ID Account cho gọn
+        }
+
+        private void LoadDatagrid()
+        {
+            try
+            {
+                // Sử dụng connectionString đã được khai báo ở trên
+                using (SqlConnection con = new SqlConnection(connectionString))
+                using (SqlCommand cmd = con.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        SELECT dg.MaDocGia, dg.HoTen, dg.NgaySinh, dg.DiaChi, dg.Email, 
+                               dg.NgayLapThe, dg.NgayHetHan, ldg.TenLoaiDocGia, 
+                               dg.SDT, dg.IDAccount
+                        FROM DOCGIA dg
+                        INNER JOIN LOAIDOCGIA ldg ON dg.MaLoaiDocGia = ldg.MaLoaiDocGia";
+
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    dtAllDocGia = new DataTable();
+                    da.Fill(dtAllDocGia);
+
+                    dgvxemdocgia.DataSource = dtAllDocGia;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi tải dữ liệu độc giả: " + ex.Message);
+            }
+        }
+
+        private void LoadLoaiDocGiaComboBox()
+        {
+            try
+            {
+                // Sử dụng connectionString đã được khai báo ở trên
+                using (SqlConnection con = new SqlConnection(connectionString))
+                {
+                    SqlDataAdapter da = new SqlDataAdapter("SELECT TenLoaiDocGia FROM LOAIDOCGIA", con);
+                    DataTable dtLoaiDocGia = new DataTable();
+                    da.Fill(dtLoaiDocGia);
+
+                    cbxLoaiDocGia.Items.Clear();
+                    cbxLoaiDocGia.Items.Add("Tất cả");
+                    foreach (DataRow row in dtLoaiDocGia.Rows)
+                    {
+                        cbxLoaiDocGia.Items.Add(row["TenLoaiDocGia"].ToString());
+                    }
+                    cbxLoaiDocGia.SelectedIndex = 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi tải loại độc giả: " + ex.Message);
+            }
+        }
+
+        private void cbxLoaiDocGia_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ApplyFilter(); // Sử dụng hàm lọc chung
+        }
+
+        private void txtTimKiem_TextChanged(object sender, EventArgs e)
+        {
+            ApplyFilter(); // Lọc ngay khi gõ
+        }
+
+        private void btnTimKiem_Click(object sender, EventArgs e)
+        {
+            ApplyFilter(); // Nút tìm kiếm cũng dùng hàm lọc
+        }
+
+        /// <summary>
+        /// Hàm lọc dữ liệu trên DataGridView từ dtAllDocGia đã tải sẵn
+        /// </summary>
+        private void ApplyFilter()
+        {
+            if (dtAllDocGia == null) return;
+
+            string filterExpression = "";
+            string searchText = txtTimKiem.Text.Trim();
+            string selectedLoai = cbxLoaiDocGia.SelectedItem.ToString();
+
+            // Lọc theo từ khóa
+            if (!string.IsNullOrEmpty(searchText))
+            {
+                filterExpression = string.Format("HoTen LIKE '%{0}%' OR MaDocGia LIKE '%{0}%' OR Email LIKE '%{0}%' OR SDT LIKE '%{0}%'", searchText.Replace("'", "''"));
+            }
+
+            // Lọc theo loại độc giả
+            if (selectedLoai != "Tất cả")
+            {
+                if (!string.IsNullOrEmpty(filterExpression))
+                {
+                    filterExpression += " AND ";
+                }
+                filterExpression += string.Format("TenLoaiDocGia = '{0}'", selectedLoai.Replace("'", "''"));
+            }
+
+            // Áp dụng bộ lọc cho DataView
+            dtAllDocGia.DefaultView.RowFilter = filterExpression;
+            dgvxemdocgia.DataSource = dtAllDocGia.DefaultView;
+        }
+
+
+        private void dgvxemdocgia_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                // Lấy dữ liệu từ DataView để đảm bảo đúng dòng đang hiển thị sau khi lọc
+                DataRowView rowView = (DataRowView)dgvxemdocgia.Rows[e.RowIndex].DataBoundItem;
+
+                string maDocGia = rowView["MaDocGia"].ToString();
+                string tenDocGia = rowView["HoTen"].ToString();
+                DateTime ngaySinh = Convert.ToDateTime(rowView["NgaySinh"]);
+                string diaChi = rowView["DiaChi"].ToString();
+                string email = rowView["Email"].ToString();
+                DateTime ngayLapThe = Convert.ToDateTime(rowView["NgayLapThe"]);
+                DateTime ngayHetHan = Convert.ToDateTime(rowView["NgayHetHan"]);
+                string loaiDocGia = rowView["TenLoaiDocGia"].ToString();
+                string IDAccount = rowView["IDAccount"].ToString();
+                string soDienThoai = rowView["SDT"].ToString();
+
+                chitietdocgia frm = new chitietdocgia(maDocGia, tenDocGia, ngaySinh, diaChi, email, ngayLapThe, ngayHetHan, loaiDocGia, IDAccount, soDienThoai);
+                frm.StartPosition = FormStartPosition.CenterParent;
+                if (frm.ShowDialog() == DialogResult.OK)
+                {
+                    LoadDatagrid(); // Tải lại dữ liệu nếu có thay đổi
+                }
+            }
+        }
 
         private void btnthemdocgia_Click(object sender, EventArgs e)
         {
@@ -35,247 +192,5 @@ namespace PTUDN32025
                 }
             }
         }
-        private void SetupDataGridview()
-        {
-            dgvxemdocgia.AutoGenerateColumns = false;
-            dgvxemdocgia.Columns.Clear();
-
-            dgvxemdocgia.Columns.Add(new DataGridViewTextBoxColumn { Name = "MaDocGia", DataPropertyName = "MaDocGia", HeaderText = "Mã Độc Giả", Width = 100 });
-            dgvxemdocgia.Columns.Add(new DataGridViewTextBoxColumn { Name = "HoTen", DataPropertyName = "HoTen", HeaderText = "Họ Tên", Width = 300 });
-            dgvxemdocgia.Columns.Add(new DataGridViewTextBoxColumn {Name = "NgaySinh", DataPropertyName = "NgaySinh", HeaderText = "Ngày Sinh", Width = 100 });
-            dgvxemdocgia.Columns.Add(new DataGridViewTextBoxColumn {Name = "DiaChi", DataPropertyName = "DiaChi", HeaderText = "Địa Chỉ", Width = 200 });
-            dgvxemdocgia.Columns.Add(new DataGridViewTextBoxColumn {Name = "Email", DataPropertyName = "Email", HeaderText = "Email", Width = 150 });
-            dgvxemdocgia.Columns.Add(new DataGridViewTextBoxColumn {Name = "NgayLapThe", DataPropertyName = "NgayLapThe", HeaderText = "Ngày Lập Thẻ", Width = 100 });
-            dgvxemdocgia.Columns.Add(new DataGridViewTextBoxColumn {Name = "NgayHetHan", DataPropertyName = "NgayHetHan", HeaderText = "Ngày Hết Hạn", Width = 100 });
-            dgvxemdocgia.Columns.Add(new DataGridViewTextBoxColumn {Name = "TenLoaiDocGia", DataPropertyName = "TenLoaiDocGia", HeaderText = "Tên loại độc giả", Width = 200 });
-            dgvxemdocgia.Columns.Add(new DataGridViewTextBoxColumn {Name = "SDT", DataPropertyName = "SDT", HeaderText = "Số Điện Thoại", Width = 100 });
-            dgvxemdocgia.Columns.Add(new DataGridViewTextBoxColumn {Name = "IDAccount", DataPropertyName = "IDAccount", HeaderText = "ID Tài Khoản", Width = 100 });
-        }
-
-        private void LoadDatagrid(string tenLoaiDocGia = null)
-        {
-            SetupDataGridview();
-
-            string connectionString = "data source=.\\SQLEXPRESS;database=QuanLyThuVien;integrated security=True";
-            using (SqlConnection con = new SqlConnection(connectionString))
-            using (SqlCommand cmd = con.CreateCommand())
-            {
-                cmd.CommandText = @"
-                    SELECT dg.MaDocGia, dg.HoTen, dg.NgaySinh, dg.DiaChi, dg.Email, 
-                           dg.NgayLapThe, dg.NgayHetHan, ldg.TenLoaiDocGia, 
-                           dg.SDT, dg.IDAccount
-                    FROM DOCGIA dg
-                    INNER JOIN LOAIDOCGIA ldg ON dg.MaLoaiDocGia = ldg.MaLoaiDocGia";
-
-                if (!string.IsNullOrEmpty(tenLoaiDocGia))
-                {
-                    cmd.CommandText += " WHERE ldg.TenLoaiDocGia = @TenLoaiDocGia";
-                    cmd.Parameters.AddWithValue("@TenLoaiDocGia", tenLoaiDocGia);
-                }
-
-                SqlDataAdapter da = new SqlDataAdapter(cmd);
-                dtAllDocGia = new DataTable();
-                da.Fill(dtAllDocGia);
-
-                dgvxemdocgia.DataSource = dtAllDocGia;
-            }
-        }
-
-        private void ucdocgia_Load(object sender, EventArgs e)
-        {
-            SetupDataGridview();
-            LoadDatagrid();
-            LoadLoaiDocGiaComboBox();
-
-        }
-        private void docgia_Load(object sender, EventArgs e)
-        {
-            SetupDataGridview();
-            LoadDatagrid();
-            
-        }
-        private void LoadLoaiDocGiaComboBox()
-        {
-            string connectionString = "data source=.\\SQLEXPRESS;database=QuanLyThuVien;integrated security=True";
-            using (SqlConnection con = new SqlConnection(connectionString))
-            using (SqlCommand cmd = con.CreateCommand())
-            {
-                cmd.CommandText = "SELECT TenLoaiDocGia FROM LOAIDOCGIA";
-                SqlDataAdapter da = new SqlDataAdapter(cmd);
-                DataTable dtLoaiDocGia = new DataTable();
-                da.Fill(dtLoaiDocGia);
-                cbxLoaiDocGia.Items.Clear();
-                cbxLoaiDocGia.Items.Add("Tất cả");
-                foreach (DataRow row in dtLoaiDocGia.Rows)
-                {
-                    cbxLoaiDocGia.Items.Add(row["TenLoaiDocGia"].ToString());
-                }
-                cbxLoaiDocGia.SelectedIndex = 0; // Chọn mục "Tất cả" làm mặc định
-            }
-        }
-        private void cbxLoaiDocGia_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            string selectedLoaiDocGia = cbxLoaiDocGia.SelectedItem.ToString();
-            if (selectedLoaiDocGia == "Tất cả")
-            {
-                LoadDatagrid();
-            }
-            else
-            {
-                LoadDatagrid(selectedLoaiDocGia);
-            }
-        }
-
-        private void flowLayoutPanel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void txtSearch_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void dgvxemdocgia_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0)
-            {
-                DataGridViewRow row = dgvxemdocgia.Rows[e.RowIndex];
-
-                string maDocGia = row.Cells["MaDocGia"].Value.ToString();
-                string tenDocGia = row.Cells["HoTen"].Value.ToString();
-                DateTime ngaySinh = Convert.ToDateTime(row.Cells["NgaySinh"].Value);
-                string diaChi = row.Cells["DiaChi"].Value.ToString();
-                string email = row.Cells["Email"].Value.ToString();
-                DateTime ngayLapThe = Convert.ToDateTime(row.Cells["NgayLapThe"].Value);
-                DateTime ngayHetHan = Convert.ToDateTime(row.Cells["NgayHetHan"].Value);
-                string loaiDocGia = row.Cells["TenLoaiDocGia"].Value.ToString();
-                string IDAccount = row.Cells["IDAccount"].Value.ToString();
-                string soDienThoai = row.Cells["SDT"].Value.ToString();
-
-
-                chitietdocgia frm = new chitietdocgia(maDocGia, tenDocGia, ngaySinh, diaChi, email, ngayLapThe, ngayHetHan, loaiDocGia, IDAccount, soDienThoai);
-                frm.StartPosition = FormStartPosition.CenterParent;
-                if (frm.ShowDialog() == DialogResult.OK)
-                {
-                    // 🔹 Gọi lại hàm load dữ liệu
-                    LoadDatagrid();
-                }
-            }
-            
-        }
-        private (string sql, List<SqlParameter> parameters) BuildKeywordSearchSql(string[] tokens)
-        {
-            // Các cột bạn muốn tìm theo
-            string[] cols = new string[]
-            {
-        "dg.HoTen",
-        "dg.Email",
-        "dg.DiaChi",
-        "dg.SDT",
-        "ldg.TenLoaiDocGia"
-            };
-
-            var paramList = new List<SqlParameter>();
-            var scoreParts = new List<string>();
-            var whereParts = new List<string>();
-
-            for (int t = 0; t < tokens.Length; t++)
-            {
-                string pname = "@p" + t;
-                paramList.Add(new SqlParameter(pname, "%" + tokens[t] + "%"));
-
-                var tokenConditions = new List<string>();
-                foreach (var c in cols)
-                {
-                    scoreParts.Add($"SUM(CASE WHEN {c} COLLATE Latin1_General_CI_AI LIKE {pname} THEN 1 ELSE 0 END)");
-                    tokenConditions.Add($"{c} COLLATE Latin1_General_CI_AI LIKE {pname}");
-                }
-                whereParts.Add("(" + string.Join(" OR ", tokenConditions) + ")");
-            }
-
-            string scoreExpr = string.Join(" + ", scoreParts);
-            string whereExpr = string.Join(" OR ", whereParts);
-
-            string sql = $@"
-        SELECT dg.MaDocGia, dg.HoTen, dg.NgaySinh, dg.DiaChi, dg.Email,
-               dg.NgayLapThe, dg.NgayHetHan, ldg.TenLoaiDocGia, dg.SDT,
-               ({scoreExpr}) AS Score
-        FROM DOCGIA dg
-        LEFT JOIN LOAIDOCGIA ldg ON dg.MaLoaiDocGia = ldg.MaLoaiDocGia
-        GROUP BY dg.MaDocGia, dg.HoTen, dg.NgaySinh, dg.DiaChi, dg.Email,
-                 dg.NgayLapThe, dg.NgayHetHan, ldg.TenLoaiDocGia, dg.SDT
-        HAVING ({scoreExpr}) > 0
-        {(string.IsNullOrWhiteSpace(whereExpr) ? "" : " AND (" + whereExpr + ")")}
-        ORDER BY Score DESC";
-
-            return (sql, paramList);
-        }
-
-        private DataTable SearchByKeywords(string rawInput)
-        {
-            if (string.IsNullOrWhiteSpace(rawInput))
-                return new DataTable();
-
-            var tokens = Regex.Split(rawInput.Trim(), @"\s+")
-                              .Where(t => !string.IsNullOrWhiteSpace(t))
-                              .ToArray();
-
-            if (tokens.Length == 0)
-                return new DataTable();
-
-            var (sql, parameters) = BuildKeywordSearchSql(tokens);
-
-            string connectionString = "data source=.\\SQLEXPRESS;database=QuanLyThuVien;integrated security=True";
-
-            using (SqlConnection con = new SqlConnection(connectionString))
-            using (SqlCommand cmd = new SqlCommand(sql, con))
-            {
-                cmd.Parameters.AddRange(parameters.ToArray());
-                SqlDataAdapter da = new SqlDataAdapter(cmd);
-                DataTable dt = new DataTable();
-                da.Fill(dt);
-                return dt;
-            }
-        }
-
-        private void DoSearch()
-        {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(txtTimKiem.Text))
-                {
-                    // Nếu không nhập gì thì hiển thị lại tất cả
-                    LoadDatagrid();
-                    return;
-                }
-
-                var dt = SearchByKeywords(txtTimKiem.Text);
-
-                // 🔹 Gỡ liên kết cũ rồi gán DataSource mới
-                dgvxemdocgia.DataSource = null;
-                dgvxemdocgia.DataSource = dt;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi tìm kiếm: " + ex.Message);
-            }
-        }
-
-        private void btnTimKiem_Click(object sender, EventArgs e)
-        {
-            DoSearch();
-        }
-
     }
 }

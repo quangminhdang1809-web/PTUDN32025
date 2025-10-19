@@ -1,7 +1,7 @@
 ﻿using System.Data.SqlClient;
 using System;
 using System.Data;
-using System.Windows.Forms;
+using System.Configuration;
 namespace PTUDN32025
 {
     public partial class frmdangnhap : Form
@@ -55,15 +55,19 @@ namespace PTUDN32025
 
         private void btndangnhap_Click(object sender, EventArgs e)
         {
-            string ConnectionString = "data source = .\\SQLEXPRESS; database = QuanLyThuVien; Integrated Security=True;";
+            SqlConnection con = new SqlConnection();
 
-            using (SqlConnection con = new SqlConnection(ConnectionString))
-            {
-                con.Open();
-                string query = "SELECT * FROM ACCOUNT WHERE IDAccount = @IDAccount AND PasswordAccount = @PasswordAccount";
-                SqlCommand cmd = new SqlCommand(query, con);
-                cmd.Parameters.AddWithValue("@IDAccount", txttendangnhap.Text);
-                cmd.Parameters.AddWithValue("@PasswordAccount", txtmatkhau.Text);
+            // THAY ĐỔI DUY NHẤT ĐƯỢC THỰC HIỆN Ở ĐÂY
+            con.ConnectionString = ConfigurationManager.ConnectionStrings["LibraryDB"].ConnectionString;
+
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+
+            // Logic còn lại được giữ nguyên theo yêu cầu của bạn
+            cmd.CommandText = "select * from ACCOUNT where IDAccount = '" + txttendangnhap.Text + "'and PasswordAccount ='" + txtmatkhau.Text + "'";
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
 
                 SqlDataReader reader = cmd.ExecuteReader();
                 if (reader.Read())

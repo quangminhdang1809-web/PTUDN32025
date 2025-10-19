@@ -8,64 +8,69 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Configuration; // SỬA 1: Thêm using cần thiết
 
 namespace PTUDN32025
 {
     public partial class chitietdocgia : Form
     {
-        private int maSach;
+        // SỬA 2: Khai báo một chuỗi kết nối duy nhất cho toàn bộ Form
+        private readonly string connectionString = ConfigurationManager.ConnectionStrings["LibraryDB"].ConnectionString;
 
         // Lưu bản gốc để Undo
         private string originalMaDocGia;
         private string originalTenDocGia;
-        private string originalNgaysinh;
+        private DateTime originalNgaysinh;
         private string originalDiaChi;
         private string originalEmail;
-        private string originalNgayLapThe;
-        private string originalNgayHetHan;
+        private DateTime originalNgayLapThe;
+        private DateTime originalNgayHetHan;
         private string originalLoaiDocGia;
-        private string IDAccount;
-        private string SoDienThoai;
+        private string originalIDAccount;
+        private string originalSoDienThoai;
+
         public chitietdocgia(string maDocGia, string tenDocGia, DateTime ngaySinh,
-                     string diaChi, string Email, DateTime ngayLapThe,
-                     DateTime ngayHetHan, string loaiDocGia, string IDAccount, string soDienThoai)
+                             string diaChi, string email, DateTime ngayLapThe,
+                             DateTime ngayHetHan, string loaiDocGia, string idAccount, string soDienThoai)
         {
             InitializeComponent();
 
             // Gán vào biến toàn cục
             this.originalMaDocGia = maDocGia;
             this.originalTenDocGia = tenDocGia;
-            this.originalNgaysinh = ngaySinh.ToString("yyyy-MM-dd");
+            this.originalNgaysinh = ngaySinh;
             this.originalDiaChi = diaChi;
-            this.originalEmail = Email;
-            this.originalNgayLapThe = ngayLapThe.ToString("yyyy-MM-dd");
-            this.originalNgayHetHan = ngayHetHan.ToString("yyyy-MM-dd");
+            this.originalEmail = email;
+            this.originalNgayLapThe = ngayLapThe;
+            this.originalNgayHetHan = ngayHetHan;
             this.originalLoaiDocGia = loaiDocGia;
-            this.IDAccount = IDAccount;
-            this.SoDienThoai = soDienThoai;
+            this.originalIDAccount = idAccount;
+            this.originalSoDienThoai = soDienThoai;
 
             // Hiển thị dữ liệu lên form
             txtMaDocGia.Text = maDocGia;
             txtTenDocGia.Text = tenDocGia;
             dtpngaysinh.Value = ngaySinh;
             txtdiachi.Text = diaChi;
-            txtemail.Text = Email;
+            txtemail.Text = email;
             dtpngaylapthe.Value = ngayLapThe;
             dtpngayhethan.Value = ngayHetHan;
-            cbxLoaiDocGia.Text = loaiDocGia;
             txtsodienthoai.Text = soDienThoai;
-            txtidaccount.Text = IDAccount;
+            txtidaccount.Text = idAccount;
         }
-
 
         private void chitietdocgia_Load(object sender, EventArgs e)
         {
             LoadLoaiDocGia();
+            // SỬA 3: Đặt giá trị cho ComboBox sau khi đã tải dữ liệu
+            cbxLoaiDocGia.Text = originalLoaiDocGia;
+
             LoadLichSuMuonTra(originalMaDocGia);
         }
+
         private void LoadLoaiDocGia()
         {
-            string connectionString = "data source=.\\SQLEXPRESS;database=QuanLyThuVien;integrated security=True";
+            // Sử dụng connectionString đã được khai báo ở trên
             using (SqlConnection con = new SqlConnection(connectionString))
             using (SqlCommand cmd = new SqlCommand("SELECT MaLoaiDocGia, TenLoaiDocGia FROM LOAIDOCGIA", con))
             {
@@ -91,28 +96,20 @@ namespace PTUDN32025
             txtsodienthoai.ReadOnly = false;
             btnLuu.Enabled = true;
             MessageBox.Show("Bạn có thể sửa thông tin độc giả.");
-
         }
+
         private void btnLuu_Click(object sender, EventArgs e)
         {
-            string connectionString = "data source=.\\SQLEXPRESS;database=QuanLyThuVien;integrated security=True";
-
+            // Sử dụng connectionString đã được khai báo ở trên
             using (SqlConnection con = new SqlConnection(connectionString))
             using (SqlCommand cmd = new SqlCommand(@"
-        UPDATE DOCGIA
-        SET 
-            HoTen = @HoTen,
-            NgaySinh = @NgaySinh,
-            DiaChi = @DiaChi,
-            Email = @Email,
-            NgayLapThe = @NgayLapThe,
-            NgayHetHan = @NgayHetHan,
-            MaLoaiDocGia = @MaLoaiDocGia,
-            SDT = @SDT
-        WHERE MaDocGia = @MaDocGia", con))
+                UPDATE DOCGIA SET 
+                    HoTen = @HoTen, NgaySinh = @NgaySinh, DiaChi = @DiaChi, Email = @Email,
+                    NgayLapThe = @NgayLapThe, NgayHetHan = @NgayHetHan, 
+                    MaLoaiDocGia = @MaLoaiDocGia, SDT = @SDT
+                WHERE MaDocGia = @MaDocGia", con))
             {
-                var maLoaiDocGia = cbxLoaiDocGia.SelectedValue;
-                if (maLoaiDocGia == null)
+                if (cbxLoaiDocGia.SelectedValue == null)
                 {
                     MessageBox.Show("Vui lòng chọn loại độc giả!");
                     return;
@@ -123,7 +120,7 @@ namespace PTUDN32025
                 cmd.Parameters.AddWithValue("@Email", txtemail.Text);
                 cmd.Parameters.AddWithValue("@NgayLapThe", dtpngaylapthe.Value);
                 cmd.Parameters.AddWithValue("@NgayHetHan", dtpngayhethan.Value);
-                cmd.Parameters.AddWithValue("@MaLoaiDocGia", cbxLoaiDocGia.SelectedValue); // hoặc txtMaLoaiDocGia.Text nếu bạn có
+                cmd.Parameters.AddWithValue("@MaLoaiDocGia", cbxLoaiDocGia.SelectedValue);
                 cmd.Parameters.AddWithValue("@SDT", txtsodienthoai.Text);
                 cmd.Parameters.AddWithValue("@MaDocGia", originalMaDocGia);
 
@@ -140,26 +137,24 @@ namespace PTUDN32025
                 {
                     MessageBox.Show("⚠️ Cập nhật thất bại. Hãy kiểm tra dữ liệu.");
                 }
-
-
             }
-
         }
+
         private void btnUndo_Click(object sender, EventArgs e)
         {
             // Khôi phục lại dữ liệu gốc
             txtMaDocGia.Text = originalMaDocGia;
             txtTenDocGia.Text = originalTenDocGia;
-            dtpngaysinh.Value = DateTime.Parse(originalNgaysinh);
+            dtpngaysinh.Value = originalNgaysinh;
             txtdiachi.Text = originalDiaChi;
             txtemail.Text = originalEmail;
-            dtpngaylapthe.Value = DateTime.Parse(originalNgayLapThe);
-            dtpngayhethan.Value = DateTime.Parse(originalNgayHetHan);
+            dtpngaylapthe.Value = originalNgayLapThe;
+            dtpngayhethan.Value = originalNgayHetHan;
             cbxLoaiDocGia.Text = originalLoaiDocGia;
-            txtsodienthoai.Text = SoDienThoai;
-            txtidaccount.Text = IDAccount;
+            txtsodienthoai.Text = originalSoDienThoai;
+            txtidaccount.Text = originalIDAccount;
+
             // Đặt lại trạng thái ban đầu
-            txtMaDocGia.ReadOnly = true;
             txtTenDocGia.ReadOnly = true;
             dtpngaysinh.Enabled = false;
             txtdiachi.ReadOnly = true;
@@ -172,12 +167,13 @@ namespace PTUDN32025
             txtidaccount.Enabled = false;
             MessageBox.Show("Đã hủy các thay đổi.");
         }
+
         private void btnXoa_Click(object sender, EventArgs e)
         {
             var result = MessageBox.Show("Bạn có chắc chắn muốn xóa độc giả này?", "Xác nhận xóa", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (result == DialogResult.Yes)
             {
-                string connectionString = "data source=.\\SQLEXPRESS;database=QuanLyThuVien;integrated security=True";
+                // Sử dụng connectionString đã được khai báo ở trên
                 using (SqlConnection con = new SqlConnection(connectionString))
                 using (SqlCommand cmd = new SqlCommand("DELETE FROM DOCGIA WHERE MaDocGia = @MaDocGia", con))
                 {
@@ -192,36 +188,32 @@ namespace PTUDN32025
                     }
                     else
                     {
-                        MessageBox.Show("⚠️ Xóa thất bại. Hãy kiểm tra lại.");
+                        MessageBox.Show("⚠️ Xóa thất bại. Có thể do độc giả đang mượn sách.");
                     }
                 }
-
             }
         }
+
         private void LoadLichSuMuonTra(string maDocGia)
         {
-            string connectionString = "data source=.\\SQLEXPRESS;database=QuanLyThuVien;integrated security=True";
-
+            // Sử dụng connectionString đã được khai báo ở trên
             using (SqlConnection con = new SqlConnection(connectionString))
             {
                 string query = @"
-        SELECT 
-            DS.TenDauSach AS [Tên sách],
-            PMS.NgayMuon AS [Ngày mượn],
-            CTPM.HanTra AS [Hạn trả],
-            PTS.NgayTra AS [Ngày trả],
-            PTS.SoNgayMuon AS [Số ngày mượn],
-            CTPM.TinhTrangMuon AS [Tình trạng mượn],
-            PTS.TinhTrangTraSach AS [Tình trạng trả],
-            PTS.TienPhat AS [Tiền phạt]
-        FROM DOCGIA DG
-        INNER JOIN PHIEUMUONSACH PMS ON DG.MaDocGia = PMS.MaDocGia
-        INNER JOIN CTPHIEUMUON CTPM ON PMS.MaPhieuMS = CTPM.MaPhieuMS
-        LEFT JOIN PHIEUTRASACH PTS ON CTPM.MaPhieuMS = PTS.MaPhieuMS AND CTPM.MaSach = PTS.MaSach
-        INNER JOIN SACH S ON CTPM.MaSach = S.MaSach
-        INNER JOIN DAUSACH DS ON S.MaDauSach = DS.MaDauSach
-        WHERE DG.MaDocGia = @MaDocGia
-        ORDER BY PMS.NgayMuon DESC";
+                    SELECT 
+                        DS.TenDauSach AS [Tên sách],
+                        PMS.NgayMuon AS [Ngày mượn],
+                        CTPM.HanTra AS [Hạn trả],
+                        PTS.NgayTra AS [Ngày trả],
+                        CTPM.TinhTrangMuon AS [Tình trạng]
+                    FROM DOCGIA DG
+                    INNER JOIN PHIEUMUONSACH PMS ON DG.MaDocGia = PMS.MaDocGia
+                    INNER JOIN CTPHIEUMUON CTPM ON PMS.MaPhieuMS = CTPM.MaPhieuMS
+                    LEFT JOIN PHIEUTRASACH PTS ON CTPM.MaPhieuMS = PTS.MaPhieuMS AND CTPM.MaSach = PTS.MaSach
+                    INNER JOIN SACH S ON CTPM.MaSach = S.MaSach
+                    INNER JOIN DAUSACH DS ON S.MaDauSach = DS.MaDauSach
+                    WHERE DG.MaDocGia = @MaDocGia
+                    ORDER BY PMS.NgayMuon DESC";
 
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
@@ -236,7 +228,7 @@ namespace PTUDN32025
 
         private void txtMaDocGia_TextChanged(object sender, EventArgs e)
         {
-
+            // Không cần code ở đây
         }
     }
 }

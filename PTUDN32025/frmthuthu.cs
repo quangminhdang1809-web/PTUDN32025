@@ -134,5 +134,11 @@ namespace PTUDN32025
         {
 
         }
+
+        private void btn4_Click(object sender, EventArgs e)
+        {
+            FrmMuonSach frm =new FrmMuonSach();
+            frm.Show();
+        }
     }
 }
