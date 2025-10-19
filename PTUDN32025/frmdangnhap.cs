@@ -69,31 +69,52 @@ namespace PTUDN32025
             DataSet ds = new DataSet();
             da.Fill(ds);
 
-            if (ds.Tables[0].Rows.Count > 0)
-            {
-                string role = ds.Tables[0].Rows[0]["TypeOfAccount"].ToString();
-
-                this.Hide();
-
-                if (role == "ADMIN")
+                SqlDataReader reader = cmd.ExecuteReader();
+                if (reader.Read())
                 {
-                    frmthuthu f = new frmthuthu();
-                    f.ShowDialog();
+                    string role = reader["TypeOfAccount"].ToString();
+                    Session.IDAccount = reader["IDAccount"].ToString();
+                    Session.TypeOfAccount = role;
                 }
-                else if (role == "USER")
+                else
                 {
-                    frmdocgia f = new frmdocgia();
-                    f.ShowDialog();
+                    MessageBox.Show("Tên đăng nhập hoặc mật khẩu không đúng", "Lỗi đăng nhập", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    reader.Close();
+                    return;
                 }
+                reader.Close();
 
-                this.Close();
-            }
-            else
-            {
-                MessageBox.Show("Tên đăng nhập hoặc mật khẩu không đúng", "Lỗi đăng nhập", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (Session.TypeOfAccount == "ADMIN")
+                    {
+                        this.Hide(); 
+                        frmthuthu f = new frmthuthu();
+                        f.ShowDialog();
+                        this.Close(); 
+                    }
+                else if (Session.TypeOfAccount == "USER")
+                    {
+                        using (SqlConnection con2 = new SqlConnection(ConnectionString))
+                        {
+                            con2.Open();
+                            string queryDocGia = "Select MaDocGia, HoTen from DOCGIA where IDAccount = @id";
+                            SqlCommand cmdDocGia = new SqlCommand(queryDocGia, con2);
+                            cmdDocGia.Parameters.AddWithValue("@id", Session.IDAccount);
+
+                            SqlDataReader readerDG = cmdDocGia.ExecuteReader();
+                            if (readerDG.Read())
+                            {
+                                Session.MaDocGia = readerDG["MaDocGia"].ToString();
+                                Session.HoTen = readerDG["HoTen"].ToString();
+                            }
+                            readerDG.Close();
+                        }
+                        this.Hide();
+                        frmdocgia f = new frmdocgia();
+                        f.ShowDialog();
+                        this.Close();
+                    }   
             }
         }
-
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
 
